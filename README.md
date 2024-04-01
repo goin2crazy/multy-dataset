@@ -7,7 +7,7 @@ This repository contains a Python class `NewDataset` designed for loading and pr
 To use this code, you need to install the required packages using pip:
 
 ```bash
-pip install -q datasets==2.18.0
+pip install -q -r requirements.txt
 ```
 
 ## Usage
