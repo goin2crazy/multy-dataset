@@ -26,7 +26,11 @@ class NewDataset():
           dataset = load_dataset(path = name) # Load Dataset from HUgging Face
           dataset = dataset.select_columns([inp, target]) # remove useless columns
             # prepare cols names
-          dataset = dataset.rename_column(inp, self.inp).rename_column(target, self.target)
+
+          try: 
+            dataset = dataset.rename_column(inp, self.inp).rename_column(target, self.target)
+          except ValueError as e: 
+            print(e)
 
           assert 'train' in list(dataset.keys())
 
