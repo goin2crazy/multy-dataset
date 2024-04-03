@@ -1,6 +1,6 @@
 # required
 # pip install -q datasets==2.18.0
- 
+
 from datasets import load_dataset, concatenate_datasets
 
 class NewDataset():
@@ -26,11 +26,10 @@ class NewDataset():
           dataset = load_dataset(path = name) # Load Dataset from HUgging Face
           dataset = dataset.select_columns([inp, target]) # remove useless columns
             # prepare cols names
-
-          try: 
-            dataset = dataset.rename_column(inp, self.inp).rename_column(target, self.target)
-          except ValueError as e: 
-            print(e)
+          if inp != self.inp: 
+            dataset = dataset.rename_column(inp, self.inp)
+          if target != self.target: 
+            dataset = dataset.rename_column(target, self.target)
 
           assert 'train' in list(dataset.keys())
 
