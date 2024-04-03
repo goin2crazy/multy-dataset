@@ -4,13 +4,20 @@
 from datasets import load_dataset, concatenate_datasets
 
 class NewDataset():
-    def __init__(self, datasets, input_col_name='inp', target_col_name='target'):
+    def __init__(self, datasets, dataset_preprocesses = {}, input_col_name='inp', target_col_name='target'):
         """
           Assuming that 'datasets' is look like:
 
             {
               <dataset path or preset>: (<input col name>, <target col name>),
               ...
+            }
+
+          If u also want to preprocess datasets at first you can u use 'dataset_preprocesses': 
+          Assuming that 'dataset_preprocesses' is look like: 
+
+            {
+              <dataset path or preset>: <fn>
             }
         """
         self.inp=input_col_name
@@ -24,11 +31,16 @@ class NewDataset():
 
         for (name, (inp, target)) in datasets.items():
           dataset = load_dataset(path = name) # Load Dataset from HUgging Face
+
+          if name in dataset_preprocesses.keys(): 
+            print(f'{name} have a custom fn')
+            dataset = dataset_preprocesses[name](dataset)
+
           dataset = dataset.select_columns([inp, target]) # remove useless columns
             # prepare cols names
-          if inp != self.inp: 
+          if inp != self.inp:
             dataset = dataset.rename_column(inp, self.inp)
-          if target != self.target: 
+          if target != self.target:
             dataset = dataset.rename_column(target, self.target)
 
           assert 'train' in list(dataset.keys())
